@@ -41,8 +41,8 @@ public class PlayerRepository {
                 }
                 case "b" -> {
                     System.out.println("......................");
-                    //List<Player> players = displayAllPlayers();
-                    //System.out.println(players);
+                    List<Player> players = displayAllPlayers();
+                    System.out.println(players);
                     System.out.println("......................");
                     System.out.println("\n");
                 }
@@ -107,8 +107,19 @@ public class PlayerRepository {
             }
         }
 
-
-
+    private List<Player> displayAllPlayers() {
+        Flux<Player> f = client
+                .get()
+                .uri("getAllPlayers")
+                .retrieve()
+                .bodyToFlux(Player.class);
+        return f.collectList().block();
+    }
 
 
 }
+
+
+
+
+
