@@ -35,7 +35,7 @@ public class PlayerRepository {
             switch (option) {
                 case "a" -> {
                     System.out.println("......................");
-                    //readPlayerToDisplay();
+                    readPlayerToDisplay();
                     System.out.println("......................");
                     System.out.println("\n");
                 }
@@ -77,9 +77,37 @@ public class PlayerRepository {
                 default -> System.out.println("Incorrect input. Please select an option from below");
             }
         }
-
-
     }
+
+        WebClient client = WebClient.create("http://localhost:8080/rest/");
+
+        private void readPlayerToDisplay() {
+            System.out.println("Enter id of player: ");
+            long id = scanner.nextLong();
+            scanner.nextLine();
+            Player player = displayPlayer(id);
+            if(player != null){
+                System.out.println("Selected player: " );
+                System.out.println(player.toString());
+            }else {
+                System.out.println("There is no such player.");
+            }
+        }
+
+        private Player displayPlayer(long id){
+            try {
+                Mono<Player> m = client
+                        .get()
+                        .uri("getPlayerById/{id}",id)
+                        .retrieve()
+                        .bodyToMono(Player.class);
+                return m.block();
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
+
 
 
 
