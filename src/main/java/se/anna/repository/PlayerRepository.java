@@ -54,7 +54,7 @@ public class PlayerRepository {
                 }
                 case "d" -> {
                     System.out.println("......................");
-                    //createPlayer();
+                    createPlayer();
                     System.out.println("......................");
                     System.out.println("\n");
                 }
@@ -125,6 +125,26 @@ public class PlayerRepository {
         return m.block();
     }
 
+
+    private boolean createPlayer() {
+        System.out.println("Enter player name: ");
+        String playerName = scanner.nextLine();
+        Player player = new Player(playerName);
+        try {
+            Mono<Player> m = client
+                    .post()
+                    .uri("createPlayer")
+                    .bodyValue(player)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(Player.class);
+            m.block();
+            return true;
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
+    }
 
 }
 
