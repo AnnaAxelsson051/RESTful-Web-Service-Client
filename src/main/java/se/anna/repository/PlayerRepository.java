@@ -66,7 +66,7 @@ public class PlayerRepository {
                 }
                 case "f" -> {
                     System.out.println("......................");
-                    //readPlayerToDelete();
+                    readPlayerToDelete();
                     System.out.println("......................");
                     System.out.println("\n");
                 }
@@ -164,6 +164,31 @@ public class PlayerRepository {
                     .put()
                     .uri("updatePlayer/{id}/{name}", id, name)
                     .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(String.class);
+            m.block();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void readPlayerToDelete() {
+        System.out.println("Enter the id of the player you would like to delete: ");
+        long id = scanner.nextLong();
+        scanner.nextLine();
+        if(deletePlayer(id)){
+            System.out.println("The selected player has been deleted: ");
+        }else {
+            System.out.println("There is no such player.");
+        }
+    }
+
+    private boolean deletePlayer(long id){
+        try {
+            Mono<String> m = client
+                    .delete()
+                    .uri("deletePlayer/{id}",id)
                     .retrieve()
                     .bodyToMono(String.class);
             m.block();
