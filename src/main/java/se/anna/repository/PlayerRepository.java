@@ -30,7 +30,7 @@ public class PlayerRepository {
             System.out.println("e) Update a player");
             System.out.println("f) Delete a player");
             System.out.println("x) Quit");
-            
+
             option = scanner.next().charAt(0);
 
             switch (option) {
