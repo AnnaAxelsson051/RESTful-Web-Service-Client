@@ -48,7 +48,7 @@ public class PlayerRepository {
                 }
                 case "c" -> {
                     System.out.println("......................");
-                    //System.out.println(displayTopPlayer().getPlayer());
+                    System.out.println(displayTopPlayer().getPlayer());
                     System.out.println("......................");
                     System.out.println("\n");
                 }
@@ -114,6 +114,15 @@ public class PlayerRepository {
                 .retrieve()
                 .bodyToFlux(Player.class);
         return f.collectList().block();
+    }
+
+    private PlayerAverage displayTopPlayer() {
+        Mono<PlayerAverage> m = client
+                .get()
+                .uri("getTopPlayer")
+                .retrieve()
+                .bodyToMono(PlayerAverage.class);
+        return m.block();
     }
 
 
