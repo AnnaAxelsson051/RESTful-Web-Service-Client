@@ -60,7 +60,7 @@ public class PlayerRepository {
                 }
                 case "e" -> {
                     System.out.println("......................");
-                    //readPlayerToUpdate();
+                    readPlayerToUpdate();
                     System.out.println("......................");
                     System.out.println("\n");
                 }
@@ -142,6 +142,33 @@ public class PlayerRepository {
             return true;
         } catch (Exception e) {
             System.out.println(e);
+            return false;
+        }
+    }
+
+    private void readPlayerToUpdate() {
+        System.out.println("Select what player id you would like to update");
+        long id = scanner.nextLong();
+        scanner.nextLine();
+        System.out.println("Enter the new payer name");
+        String name = scanner.nextLine();
+        if (updatePlayer(id, name)){
+            System.out.println("Player has been successfully updated");
+        }else {
+            System.out.println("There is no such player");
+        }
+    }
+    private boolean updatePlayer(long id, String name) {
+        try {
+            Mono<String> m = client
+                    .put()
+                    .uri("updatePlayer/{id}/{name}", id, name)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(String.class);
+            m.block();
+            return true;
+        } catch (Exception e) {
             return false;
         }
     }
